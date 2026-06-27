@@ -7,7 +7,7 @@ import jakarta.inject.Inject
 
 class DashboardRepositoryImpl @Inject constructor(
     private val dashboardApiService: DashboardApiService
-) : DashboardRepository{
+) : DashboardRepository {
 
     override suspend fun getDashboardData(): List<DashboardModel> {
         return dashboardApiService.getDashboardData().fixtureData.map { it.mapToDomain() }

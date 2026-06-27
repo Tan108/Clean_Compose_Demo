@@ -41,6 +41,10 @@ android {
 
 dependencies {
 
+    implementation(project(":core:network"))
+    implementation(project(":feature:dashboard:presentation"))
+    implementation(project(":feature:dashboard:data"))
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

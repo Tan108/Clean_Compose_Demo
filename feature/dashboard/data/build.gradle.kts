@@ -27,7 +27,6 @@ android {
 dependencies {
 
     implementation(project(":feature:dashboard:domain"))
-    implementation(project(":core:network"))
 
     // Hilt
     implementation(libs.hilt.android)

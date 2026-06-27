@@ -4,12 +4,12 @@ import com.tan.core.network.interceptors.HeaderInterceptors
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
-@InstallIn(Singleton::class)
+@InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
 

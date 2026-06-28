@@ -6,6 +6,7 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,9 @@ import com.tan.feature.dashboard.presentation.uistate.DashboardUiState
 import com.tan.feature.dashboard.presentation.viewmodel.DashboardViewModel
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    onItemClick: (String) -> Unit,
+) {
     val viewmodel: DashboardViewModel = hiltViewModel()
 
     val dashboardUiState by viewmodel.uiState.collectAsStateWithLifecycle()
@@ -44,13 +47,19 @@ fun DashboardScreen() {
             DashboardMessage(state.message)
 
         is DashboardUiState.Success ->
-            DashboardContent(data = state.data)
+            DashboardContent(
+                data = state.data,
+                onItemClick = onItemClick
+            )
     }
 
 }
 
 @Composable
-fun DashboardContent(data: List<DashboardModel>) {
+fun DashboardContent(
+    data: List<DashboardModel>,
+    onItemClick: (String) -> Unit,
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -58,14 +67,24 @@ fun DashboardContent(data: List<DashboardModel>) {
             items = data,
             key = { it.name }
         ) { dashboardModel ->
-            DashboardCardItem(dashboardModel)
+            DashboardCardItem(
+                dashboardModel = dashboardModel,
+                onItemClick = onItemClick
+            )
         }
     }
 }
 
 @Composable
-fun DashboardCardItem(dashboardModel: DashboardModel) {
-    Column {
+fun DashboardCardItem(
+    dashboardModel: DashboardModel,
+    onItemClick: (String) -> Unit,
+) {
+    Column(
+        modifier = Modifier.clickable {
+            onItemClick(dashboardModel.name)
+        }
+    ) {
         Text(text = dashboardModel.name)
         Text(text = dashboardModel.resultInfo)
     }
@@ -100,11 +119,11 @@ fun DashboardLoader() {
 }
 
 @Composable
-fun DashboardMessage(message: String){
+fun DashboardMessage(message: String) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
-       Text(message)
+    ) {
+        Text(message)
     }
 }

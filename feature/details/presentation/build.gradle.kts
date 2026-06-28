@@ -1,13 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
-    namespace = "com.tan.feature.dashboard.presentation"
+    namespace = "com.tan.details.presentation"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -28,7 +26,7 @@ android {
 
 dependencies {
 
-    implementation(project(":feature:dashboard:domain"))
+    implementation(libs.material)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -44,20 +42,12 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Inject
-    implementation(libs.javax.inject)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
     // Compose Navigation
     implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

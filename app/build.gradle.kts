@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":feature:dashboard:data"))
     implementation(project(":feature:dashboard:domain"))
     implementation(project(":feature:dashboard:presentation"))
+    implementation(project(":feature:details:presentation"))
 
     // Hilt
     implementation(libs.hilt.android)
@@ -62,6 +63,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    //compose Navigation
+    implementation(libs.androidx.hilt.navigation.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

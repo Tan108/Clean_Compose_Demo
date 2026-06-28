@@ -4,8 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.compose.rememberNavController
+import com.tan.clean_compose_demo.navigation.AppNavHost
 import com.tan.clean_compose_demo.ui.theme.Clean_Compose_DemoTheme
-import com.tan.feature.dashboard.presentation.ui.screen.DashboardScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,7 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Clean_Compose_DemoTheme {
-                DashboardScreen()
+                val navController = rememberNavController()
+                AppNavHost(navController)
             }
         }
     }

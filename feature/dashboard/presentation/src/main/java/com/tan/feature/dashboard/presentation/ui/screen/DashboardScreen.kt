@@ -1,12 +1,20 @@
 package com.tan.feature.dashboard.presentation.ui.screen
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,12 +72,30 @@ fun DashboardCardItem(dashboardModel: DashboardModel) {
 }
 
 @Composable
-fun DashboardLoader(){
+fun DashboardLoader() {
+
+    val infiniteTransition = rememberInfiniteTransition(label = "loader")
+
+    val color by infiniteTransition.animateColor(
+        initialValue = MaterialTheme.colorScheme.primary,
+        targetValue = MaterialTheme.colorScheme.tertiary,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "loaderColor"
+    )
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
-        CircularProgressIndicator()
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(60.dp),
+            color = color,
+            strokeWidth = 6.dp,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     }
 }
 

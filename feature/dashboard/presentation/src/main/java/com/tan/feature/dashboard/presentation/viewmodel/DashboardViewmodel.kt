@@ -2,13 +2,11 @@ package com.tan.feature.dashboard.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tan.feature.dashboard.domain.usecase.DashboardUseCase
-import com.tan.feature.dashboard.presentation.uistate.DashboardIntent
+import com.tan.feature.dashboard.domain.usecase.ObserveDashboardUseCase
+import com.tan.feature.dashboard.domain.usecase.RefreshDashboardUseCase
 
 import com.tan.feature.dashboard.presentation.uistate.DashboardUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,49 +14,54 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewmodel @Inject constructor(
-    private val dashboardUseCase: DashboardUseCase,
+class DashboardViewModel @Inject constructor(
+    private val observeDashboardUseCase: ObserveDashboardUseCase,
+    private val refreshDashboardUseCase: RefreshDashboardUseCase
 ) : ViewModel() {
 
-    private var _dashboardUiState = MutableStateFlow(DashboardUiState())
-    val dashboardUiState = _dashboardUiState.asStateFlow()
+    private val _uiState = MutableStateFlow(DashboardUiState())
+    val uiState = _uiState.asStateFlow()
 
-    private val exception = CoroutineExceptionHandler { context, throwable -> }
+    init {
+        observeDashboard()
+        refresh()
+    }
 
-    fun onIntent(dashboardIntent: DashboardIntent) {
-        when (dashboardIntent) {
-            DashboardIntent.GetDashboard -> getDashboardData()
+    private fun observeDashboard() {
+        viewModelScope.launch {
+            observeDashboardUseCase().collect { dashboard ->
+
+                _uiState.update {
+                    it.copy(
+                        data = dashboard,
+                        error = null
+                    )
+                }
+            }
         }
     }
 
-    private fun getDashboardData() {
-        viewModelScope.launch(exception) {
-            _dashboardUiState.update {
+    fun refresh() {
+        viewModelScope.launch {
+
+            _uiState.update {
                 it.copy(loading = true)
             }
-            try {
-                val data = dashboardUseCase.invoke()
-                _dashboardUiState.update {
-                    when {
-                        data.isEmpty() -> it.copy(
-                            loading = false,
-                            error = "No data found"
-                        )
 
-                        else -> it.copy(
-                            loading = false,
-                            data = data,
-                        )
-                    }
-                }
-            } catch (e: CancellationException) {
-                throw e
+            try {
+                refreshDashboardUseCase()
             } catch (e: Exception) {
-                _dashboardUiState.update {
-                    it.copy(loading = false, error = e.message ?: "Unknown error")
+
+                _uiState.update {
+                    it.copy(error = e.message ?: "Unknown error")
+                }
+
+            } finally {
+
+                _uiState.update {
+                    it.copy(loading = false)
                 }
             }
         }
     }
-
 }

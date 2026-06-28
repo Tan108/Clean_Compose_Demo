@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.tan.feature.dashboard.domain.model.DashboardModel
 
 data class DashboardResponseDto(
-    @SerializedName("data") val fixtureData: List<DashboardData>,
+    @SerializedName("data") val dashboardData: List<DashboardData>,
 )
 
 data class DashboardData(

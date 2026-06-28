@@ -6,24 +6,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tan.feature.dashboard.domain.model.DashboardModel
-import com.tan.feature.dashboard.presentation.uistate.DashboardIntent
-import com.tan.feature.dashboard.presentation.viewmodel.DashboardViewmodel
+import com.tan.feature.dashboard.presentation.viewmodel.DashboardViewModel
 
 @Composable
 fun DashboardScreen() {
-    val viewmodel: DashboardViewmodel = hiltViewModel()
+    val viewmodel: DashboardViewModel = hiltViewModel()
 
-    val dashboardUiState by viewmodel.dashboardUiState.collectAsStateWithLifecycle()
+    val dashboardUiState by viewmodel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewmodel.onIntent(DashboardIntent.GetDashboard)
-    }
+//    LaunchedEffect(Unit) {
+//        viewmodel.onIntent(DashboardIntent.GetDashboard)
+//    }
 
     when {
         dashboardUiState.loading -> {}

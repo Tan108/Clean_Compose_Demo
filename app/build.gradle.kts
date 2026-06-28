@@ -42,12 +42,17 @@ android {
 dependencies {
 
     implementation(project(":core:network"))
-    implementation(project(":feature:dashboard:presentation"))
     implementation(project(":feature:dashboard:data"))
+    implementation(project(":feature:dashboard:domain"))
+    implementation(project(":feature:dashboard:presentation"))
 
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    //Room
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

@@ -26,6 +26,7 @@ android {
 
 dependencies {
 
+    implementation(project(":core:common"))
     implementation(project(":feature:dashboard:domain"))
 
     // Hilt
@@ -37,6 +38,10 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.gson)
+
+    //Room
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)

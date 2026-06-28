@@ -18,14 +18,14 @@ abstract class DashboardRepositoryModule {
     @Binds
     abstract fun bindsDashboardRepository(dashboardRepositoryImpl: DashboardRepositoryImpl): DashboardRepository
 
-  companion object{
+    companion object {
 
-      @Singleton
-      @Provides
-      fun provideDashboardApi(
-          retrofit: Retrofit
-      ): DashboardApiService = retrofit.create(DashboardApiService::class.java)
+        @Singleton
+        @Provides
+        fun provideDashboardApi(
+            retrofit: Retrofit
+        ): DashboardApiService = retrofit.create(DashboardApiService::class.java)
 
-  }
+    }
 
 }

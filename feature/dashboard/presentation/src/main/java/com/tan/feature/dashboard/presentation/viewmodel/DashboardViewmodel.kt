@@ -9,6 +9,10 @@ import com.tan.feature.dashboard.presentation.uistate.DashboardUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,8 +23,11 @@ class DashboardViewModel @Inject constructor(
     private val refreshDashboardUseCase: RefreshDashboardUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DashboardUiState())
+    private val _uiState =
+        MutableStateFlow<DashboardUiState>(DashboardUiState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    private var isRefreshing = true
 
     init {
         observeDashboard()
@@ -28,39 +35,41 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun observeDashboard() {
-        viewModelScope.launch {
-            observeDashboardUseCase().collect { dashboard ->
+        observeDashboardUseCase()
+            .onEach { dashboard ->
 
-                _uiState.update {
-                    it.copy(
-                        data = dashboard,
-                        error = null
-                    )
+                _uiState.value = when {
+                    dashboard.isNotEmpty() ->
+                        DashboardUiState.Success(dashboard)
+
+                    isRefreshing ->
+                        DashboardUiState.Loading
+
+                    else ->
+                        DashboardUiState.Empty
                 }
             }
-        }
+            .catch { throwable ->
+                _uiState.value =
+                    DashboardUiState.Error(
+                        throwable.message ?: "Unknown error"
+                    )
+            }
+            .launchIn(viewModelScope)
     }
 
     fun refresh() {
         viewModelScope.launch {
-
-            _uiState.update {
-                it.copy(loading = true)
-            }
+            isRefreshing = true
 
             try {
                 refreshDashboardUseCase()
             } catch (e: Exception) {
-
-                _uiState.update {
-                    it.copy(error = e.message ?: "Unknown error")
-                }
-
+                _uiState.value = DashboardUiState.Error(
+                    e.message ?: "Unknown error"
+                )
             } finally {
-
-                _uiState.update {
-                    it.copy(loading = false)
-                }
+                isRefreshing = false
             }
         }
     }

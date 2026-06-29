@@ -58,6 +58,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.material)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.assertions)
+    testImplementation(libs.kotest.property)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

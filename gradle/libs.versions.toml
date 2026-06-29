@@ -20,6 +20,8 @@ serialization = "1.7.3"
 javax-inject = "1"
 room = "2.7.2"
 navigation = "2.9.3"
+mockk = "1.14.9"
+kotest = "6.1.11"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +52,11 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 # Compose Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+
+kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest" }
 
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
